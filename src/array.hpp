@@ -65,16 +65,24 @@ std::size_t array_element_number(std::size_t rank,
 			 1ul, std::multiplies<std::size_t>());
 }
 
+template<typename D, typename ... As>
+struct array_from;
+
 template<typename D, typename A, typename ... As>
-void fill_array_with_parameters(D* dest, const A& a, const As&... as) {
-  *dest = a;
-  fill(++dest, as...);
-}
+struct array_from<D, A, As...> {
+  static void parameters(D* dest, const A& a, As ... as) {
+    *dest = a;
+    array_from<D, As...>::parameters(++dest, as...);
+  }
+};
 
 template<typename D, typename A>
-void fill_array_with_parameters(D* dest, const A& a) {
-  *dest = a;
-}
+struct array_from<D, A> {
+  static void parameters(D* dest, const A& a) {
+    *dest = a;
+  }
+};
+
 
 template<typename T>
 class array {
@@ -130,7 +138,7 @@ public:
       throw std::string("multi index rank mismatch");
     
     std::size_t indices[sizeof...(Is)] = {};
-    fill_array_with_parameters(indices, is...);
+    array_from<std::size_t, Is...>::parameters(indices, is...);
 
     return data[to_linear_index(rank, sizes, indices, false)];
   }
@@ -141,7 +149,7 @@ public:
       throw std::string("multi index rank mismatch");
     
     std::size_t indices[sizeof...(Is)] = {};
-    fill_array_with_parameters(indices, is...);
+    array_from<std::size_t, Is...>::parameters(indices, is...);
 
     return data[to_linear_index(rank, sizes, indices, false)];
   }
