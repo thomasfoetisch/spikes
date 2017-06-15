@@ -150,7 +150,7 @@ public:
   T* get_data() { return data; }
 
   void set_data(const T* new_data) {
-    const std::size_t offset(array_element_number(sizes, rank));
+    const std::size_t offset(array_element_number(rank, sizes));
     std::copy(new_data, new_data + offset, this->data);
   }
 
