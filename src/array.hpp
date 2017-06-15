@@ -125,7 +125,7 @@ public:
   array<T>& operator=(array<T>&&) = delete;
   
   template<typename ... Is>
-  const T& at(Is ... is) {
+  const T& at(Is ... is) const {
     if (sizeof...(Is) != rank)
       throw std::string("multi index rank mismatch");
     
