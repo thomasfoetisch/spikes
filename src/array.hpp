@@ -58,6 +58,13 @@ void to_multi_index(std::size_t rank,
   }
 }
 
+inline
+std::size_t array_element_number(std::size_t rank,
+				 std::size_t* sizes) {
+  return std::accumulate(sizes, sizes + rank,
+			 1ul, std::multiplies<std::size_t>());
+}
+
 template<typename D, typename A, typename ... As>
 void fill_array_with_parameters(D* dest, const A& a, const As&... as) {
   *dest = a;
@@ -137,6 +144,14 @@ public:
     fill_array_with_parameters(indices, is...);
 
     return data[to_linear_index(rank, sizes, indices, false)];
+  }
+
+  const T* get_data() const { return data; }
+  T* get_data() { return data; }
+
+  void set_data(const T* new_data) {
+    const std::size_t offset(array_element_number(sizes, rank));
+    std::copy(new_data, new_data + offset, this->data);
   }
 
   std::size_t get_rank() const { return rank; }
