@@ -165,6 +165,7 @@ public:
   std::size_t get_rank() const { return rank; }
   std::size_t get_size(std::size_t i) const { return sizes[i]; }
   const std::size_t* get_sizes() const { return sizes; }
+  std::size_t get_element_number() const { return array_element_number(rank, sizes); }
   
 private:
   std::size_t rank;
