@@ -20,7 +20,7 @@ void check_linear_index(std::size_t rank,
 			std::size_t linear_index) {
   if (linear_index >= std::accumulate(sizes,
 				      sizes + rank,
-				      1, std::multiplies<std::size_t>()))
+				      (std::size_t)1, std::multiplies<std::size_t>()))
     throw std::string("linear index out of bound");
 }
 
