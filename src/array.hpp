@@ -187,6 +187,10 @@ public:
     std::copy(new_data, new_data + offset, this->data);
   }
 
+  void fill(T v) {
+    std::fill(data, data + array_element_number(rank, sizes), v);
+  }
+
   std::size_t get_rank() const { return rank; }
   std::size_t get_size(std::size_t i) const { return sizes[i]; }
   const std::size_t* get_sizes() const { return sizes; }
