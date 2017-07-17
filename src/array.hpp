@@ -129,8 +129,33 @@ public:
     delete [] data; data = nullptr;
   }
 
-  array<T>& operator=(const array<T>&) = delete;
-  array<T>& operator=(array<T>&&) = delete;
+  array<T>& operator=(const array<T>& op) {
+    delete [] sizes; sizes = nullptr;
+    delete [] data; data = nullptr;
+    
+    rank = op.rank;
+
+    sizes = new std::size_t[rank];
+    std::copy(op.sizes, op.sizes + op.rank, sizes);
+
+    data = new T[array_element_number(rank, sizes)];
+    std::copy(op.data, op.data + array_element_number(rank, sizes), data);
+
+    return *this;
+  }
+  /*array<T>& operator=(array<T>&& op) {
+    delete [] sizes; sizes = nullptr;
+    delete [] data; data = nullptr;
+    
+    rank = op.rank;
+    sizes = op.sizes;
+    data = op.data;
+
+    op.sizes = nullptr;
+    op.data = nullptr;
+    
+    return *this;
+    }*/
   
   template<typename ... Is>
   const T& at(Is ... is) const {

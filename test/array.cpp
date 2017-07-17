@@ -17,6 +17,16 @@ void test_construction() {
   array<double> c(a);
 }
 
+void test_assignment() {
+  std::size_t sizes[] = {5, 3, 2};
+  array<double> a(3, sizes);
+  array<double> b = {5, 3, 2};
+  array<double> c(a);
+
+  c = a;
+  b = array<double>{2, 3, 4};
+}
+
 int main(int argc, char *argv[]) {
   test_index();
   test_construction();
