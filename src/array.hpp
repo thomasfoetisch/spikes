@@ -29,7 +29,9 @@ std::size_t to_linear_index(std::size_t rank,
 			    const std::size_t* sizes,
 			    const std::size_t* multi_index,
 			    bool fortran_array_layout = false) {
+#ifdef DEBUG
   check_multi_index(rank, sizes, multi_index);
+#endif
   
   std::size_t linear_index(0);
   std::size_t basis(1);
@@ -49,7 +51,9 @@ void to_multi_index(std::size_t rank,
 		    const std::size_t* sizes,
 		    std::size_t linear_index,
 		    bool fortran_array_layout = false) {
+#ifdef DEBUG
   check_linear_index(rank, sizes, linear_index);
+#endif
   
   for (std::size_t i(0); i < rank; ++i) {
     const std::size_t pos(fortran_array_layout ? i : rank - 1 - i);
@@ -143,7 +147,7 @@ public:
 
     return *this;
   }
-  /*array<T>& operator=(array<T>&& op) {
+  array<T>& operator=(array<T>&& op) {
     delete [] sizes; sizes = nullptr;
     delete [] data; data = nullptr;
     
@@ -153,16 +157,66 @@ public:
 
     op.sizes = nullptr;
     op.data = nullptr;
+    op.rank = 0;
     
     return *this;
-    }*/
+  }
+
+  const T& at(std::size_t i, std::size_t j) const {
+#ifdef DEBUG
+    if (2 != rank)
+      throw std::string("multi index rank mismatch");
+    const std::size_t is[] = {i, j};
+    check_multi_index(rank, sizes, is);
+#endif
+    
+    return data[i * sizes[1] + j];
+  }
+
+  T& at(std::size_t i, std::size_t j) {
+#ifdef DEBUG
+    if (2 != rank)
+      throw std::string("multi index rank mismatch");
+    const std::size_t is[] = {i, j};
+    check_multi_index(rank, sizes, is);
+#endif
+    
+    return data[i * sizes[1] + j];
+  }
+
+
+  const T& at(std::size_t i, std::size_t j, std::size_t k) const {
+#ifdef DEBUG
+    if (3 != rank)
+      throw std::string("multi index rank mismatch");
+    const std::size_t is[] = {i, j, k};
+    check_multi_index(rank, sizes, is);
+#endif
+    
+    return data[i * sizes[1] * sizes[2] + j * sizes[2] + k];
+  }
+
+  T& at(std::size_t i, std::size_t j, std::size_t k) {
+#ifdef DEBUG
+    if (3 != rank)
+      throw std::string("multi index rank mismatch");
+    const std::size_t is[] = {i, j, k};
+    check_multi_index(rank, sizes, is);
+#endif
+    
+    return data[i * sizes[1] * sizes[2] + j * sizes[2] + k];
+  }
+  
+  
   
   template<typename ... Is>
   const T& at(Is ... is) const {
+#ifdef DEBUG
     if (sizeof...(Is) != rank)
       throw std::string("multi index rank mismatch");
+#endif
     
-    std::size_t indices[sizeof...(Is)] = {};
+    std::size_t indices[sizeof...(Is)];
     array_from<std::size_t, Is...>::parameters(indices, is...);
 
     return data[to_linear_index(rank, sizes, indices, false)];
@@ -170,10 +224,12 @@ public:
 
   template<typename ... Is>
   T& at(Is ... is) {
+#ifdef DEBUG
     if (sizeof...(Is) != rank)
       throw std::string("multi index rank mismatch");
+#endif
     
-    std::size_t indices[sizeof...(Is)] = {};
+    std::size_t indices[sizeof...(Is)];
     array_from<std::size_t, Is...>::parameters(indices, is...);
 
     return data[to_linear_index(rank, sizes, indices, false)];
