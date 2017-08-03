@@ -30,7 +30,7 @@ $(DEPS): build/%.deps: %.cpp
 
 $(BIN): bin/%:
 	@echo "[LD]  " $@
-	@$(CXX) $(LDFLAGS) -o $@ $^
+	@$(CXX) $(LDFLAGS) -o $@ $^ $(LDLIB)
 
 $(LIB): lib/%:
 	@echo "[AR]  " $@
