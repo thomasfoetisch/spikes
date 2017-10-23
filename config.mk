@@ -1,5 +1,5 @@
-CXX = clang++-3.8
-DEPS_BIN = clang++-3.8
+CXX = clang++
+DEPS_BIN = clang++
 CXXFLAGS = -g -std=c++11
 LDFLAGS = -g
 LDLIB = -lpthread
@@ -14,7 +14,7 @@ LIB_DIR = lib/
 
 SOURCES = test/array.cpp test/image.cpp test/thread_pool.cpp
 
-HEADERS = include/array.hpp include/thread_pool.hpp
+HEADERS = include/array.hpp include/thread_pool.hpp include/meta.hpp
 
 BIN = bin/test_array bin/test_image bin/test_thread_pool
 

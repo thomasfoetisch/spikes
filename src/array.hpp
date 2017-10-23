@@ -64,7 +64,7 @@ void to_multi_index(std::size_t rank,
 
 inline
 std::size_t array_element_number(std::size_t rank,
-				 std::size_t* sizes) {
+				 const std::size_t* sizes) {
   return std::accumulate(sizes, sizes + rank,
 			 1ul, std::multiplies<std::size_t>());
 }
