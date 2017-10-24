@@ -147,6 +147,7 @@ public:
 
     return *this;
   }
+  
   array<T>& operator=(array<T>&& op) {
     delete [] sizes; sizes = nullptr;
     delete [] data; data = nullptr;
@@ -161,6 +162,30 @@ public:
     
     return *this;
   }
+
+
+  const T& at(std::size_t i) const {
+#ifdef DEBUG
+    if (1 != rank)
+      throw std::string("multi index rank mismatch");
+    const std::size_t is[] = {i};
+    check_multi_index(rank, sizes, is);
+#endif
+    
+    return data[i];
+  }
+
+  T& at(std::size_t i) {
+#ifdef DEBUG
+    if (1 != rank)
+      throw std::string("multi index rank mismatch");
+    const std::size_t is[] = {i};
+    check_multi_index(rank, sizes, is);
+#endif
+    
+    return data[i];
+  }
+
 
   const T& at(std::size_t i, std::size_t j) const {
 #ifdef DEBUG
@@ -206,9 +231,8 @@ public:
     
     return data[i * sizes[1] * sizes[2] + j * sizes[2] + k];
   }
-  
-  
-  
+
+
   template<typename ... Is>
   const T& at(Is ... is) const {
 #ifdef DEBUG
@@ -236,6 +260,7 @@ public:
   }
 
   const T* get_data() const { return data; }
+  
   T* get_data() { return data; }
 
   void set_data(const T* new_data) {
