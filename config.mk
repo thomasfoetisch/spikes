@@ -1,10 +1,12 @@
 CXX = clang++
 DEPS_BIN = clang++
-CXXFLAGS = -g -std=c++11
-LDFLAGS = -g
+CXXFLAGS = -O2 -std=c++11
+LDFLAGS = -O2
 LDLIB = -lpthread
 AR = ar
 ARFLAGS = rc
+MKDIR = mkdir
+MKDIRFLAGS = -p
 
 PREFIX = ~/.local/
 BIN_DIR = bin/

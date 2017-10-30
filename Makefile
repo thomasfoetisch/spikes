@@ -5,7 +5,7 @@ include config.mk
 OBJECTS = $(patsubst %.cpp,build/%.o,$(SOURCES))
 DEPS = $(patsubst %.cpp,build/%.deps,$(SOURCES))
 
-.PHONY = all deps clean install
+.PHONY = all deps clean install install-bin install-header install-lib install-dev
 .DEFAULT_GOAL = all
 
 all: $(BIN) $(LIB) $(HEADERS)
@@ -46,20 +46,27 @@ clean:
 	@rm -rf include/*
 	@rm -f $(LIB)
 
-install: $(BIN) $(HEADERS) $(LIB)
+install: install-dev
+install-dev: install-header install-lib
+install-all: install-header install-lib install-bin
+
+install-bin: $(BIN)
+	@echo "[CP]  " $(BIN)
 ifneq ($(BIN),)
-	@echo "[CP]  " binaries
-	@mkdir -p $(PREFIX)/$(BIN_DIR)/
+	@$(MKDIR) $(MKDIRFLAGS) $(PREFIX)/$(BIN_DIR)/
 	@cp $(BIN) $(PREFIX)/$(BIN_DIR)/
 endif
-ifneq ($(wildcard include/*),)
-	@echo "[CP]  " headers
-	@mkdir -p $(PREFIX)/$(INCLUDE_DIR)/
+
+install-header: $(HEADERS)
+	@echo "[CP]  " $(HEADERS)
+ifneq ($(HEADERS),)
+	@$(MKDIR) $(MKDIRFLAGS) $(PREFIX)/$(INCLUDE_DIR)/
 	@cp -r include/* $(PREFIX)/$(INCLUDE_DIR)/
 endif
+install-lib: $(LIB)
+	@echo "[CP]  " $(LIBS)
 ifneq ($(LIB),)
-	@echo "[CP]  " libraries
-	@mkdir -p $(PREFIX)/$(LIB_DIR)/
+	@$(MKDIR) $(MKDIRFLAGS) $(PREFIX)/$(LIB_DIR)/
 	@cp $(LIB) $(PREFIX)/$(LIB_DIR)/
 endif
 
