@@ -22,6 +22,7 @@ namespace ansi {
     
     friend std::ostream& operator<<(std::ostream& stream, const color216& manip) {
       stream << "\e[38;5;" << 16 + 36 * manip.r + 6 * manip.g + manip.b << "m";
+      return stream;
     }
 
     const unsigned int r, g, b;
@@ -34,6 +35,7 @@ namespace ansi {
 
     friend std::ostream& operator<<(std::ostream& stream, const color& manip) {
       stream << "\e[38;5;" << manip.c << "m";
+      return stream;
     }
     
     const unsigned int c;
