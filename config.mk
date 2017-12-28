@@ -16,7 +16,7 @@ LIB_DIR = lib/
 
 SOURCES = test/array.cpp test/image.cpp test/thread_pool.cpp test/ansi_iomanip.cpp
 
-HEADERS = include/array.hpp include/thread_pool.hpp include/meta.hpp include/timer.hpp
+HEADERS = include/array.hpp include/thread_pool.hpp include/meta.hpp include/timer.hpp include/ansi_iomanip.hpp
 
 BIN = bin/test_array bin/test_image bin/test_thread_pool bin/test_ansi_iomanip
 
