@@ -15,6 +15,10 @@ public:
     return std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
   }
 
+  void reset() {
+    start = std::chrono::high_resolution_clock::now();
+  }
+
 private:
   std::chrono::time_point<std::chrono::high_resolution_clock> start;
 };
