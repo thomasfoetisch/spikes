@@ -94,37 +94,37 @@ public:
   typedef T value_type;
 
   array(std::size_t r, const std::size_t* s):
-    rank(r), sizes(new std::size_t[rank]), data(nullptr) {
+    rank(r), sizes(new std::size_t[rank]), element_number(0), data(nullptr) {
 
     std::copy(s, s + r, sizes);
-    const std::size_t elements_number(std::accumulate(sizes,
-						      sizes + rank,
-						      1, std::multiplies<std::size_t>()));
-    data = new T[elements_number];
+    element_number = std::accumulate(sizes,
+                                     sizes + rank,
+                                     1, std::multiplies<std::size_t>());
+    data = new T[element_number];
   }
 
   array(std::initializer_list<std::size_t> s)
-    : rank(s.size()), sizes(new std::size_t[rank]), data(nullptr) {
+    : rank(s.size()), sizes(new std::size_t[rank]), element_number(0), data(nullptr) {
 
     std::copy(s.begin(), s.end(), sizes);
-    const std::size_t elements_number(std::accumulate(sizes,
-						      sizes + rank,
-						      1, std::multiplies<std::size_t>()));
-    data = new T[elements_number];
+    element_number = std::accumulate(sizes,
+                                     sizes + rank,
+                                     1, std::multiplies<std::size_t>());
+    data = new T[element_number];
   }
 
   array(const array<T>& op): array(op.rank, op.sizes) {
-    const std::size_t elements_number(std::accumulate(sizes,
-						      sizes + rank,
-						      1, std::multiplies<std::size_t>()));
-    std::copy(op.data, op.data + elements_number, data);
+    std::copy(op.data, op.data + element_number, data);
   }
 
   array(array<T>&& op)
     : rank(op.rank),
       sizes(op.sizes),
+      element_number(op.element_number),
       data(op.data) {
+    op.rank = 0;
     op.sizes = nullptr;
+    op.element_number = 0;
     op.data = nullptr;
   }
 
@@ -142,6 +142,8 @@ public:
     sizes = new std::size_t[rank];
     std::copy(op.sizes, op.sizes + op.rank, sizes);
 
+    element_number = op.element_number;
+
     data = new T[array_element_number(rank, sizes)];
     std::copy(op.data, op.data + array_element_number(rank, sizes), data);
 
@@ -154,10 +156,12 @@ public:
     
     rank = op.rank;
     sizes = op.sizes;
+    element_number = op.element_number;
     data = op.data;
 
     op.sizes = nullptr;
     op.data = nullptr;
+    op.element_number = 0;
     op.rank = 0;
     
     return *this;
@@ -264,8 +268,7 @@ public:
   T* get_data() { return data; }
 
   void set_data(const T* new_data) {
-    const std::size_t offset(array_element_number(rank, sizes));
-    std::copy(new_data, new_data + offset, this->data);
+    std::copy(new_data, new_data + element_number, this->data);
   }
 
   void fill(T v) {
@@ -275,11 +278,12 @@ public:
   std::size_t get_rank() const { return rank; }
   std::size_t get_size(std::size_t i) const { return sizes[i]; }
   const std::size_t* get_sizes() const { return sizes; }
-  std::size_t get_element_number() const { return array_element_number(rank, sizes); }
+  std::size_t get_element_number() const { return element_number; }
   
 private:
   std::size_t rank;
   std::size_t *sizes;
+  std::size_t element_number;
   value_type* data;
 };
 
