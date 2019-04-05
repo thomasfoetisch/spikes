@@ -10,13 +10,19 @@ MKDIRFLAGS = -p
 
 PREFIX = ~/.local/
 BIN_DIR = bin/
-INCLUDE_DIR = include/spikes/
+INCLUDE_DIR = include/
 LIB_DIR = lib/
 
 
 SOURCES = test/array.cpp test/image.cpp test/thread_pool.cpp test/ansi_iomanip.cpp
 
-HEADERS = include/array.hpp include/thread_pool.hpp include/meta.hpp include/timer.hpp include/ansi_iomanip.hpp include/string_builder.hpp
+HEADERS = \
+include/spikes/array.hpp \
+include/spikes/thread_pool.hpp \
+include/spikes/meta.hpp \
+include/spikes/timer.hpp \
+include/spikes/ansi_iomanip.hpp \
+include/spikes/string_builder.hpp
 
 BIN = bin/test_array bin/test_image bin/test_thread_pool bin/test_ansi_iomanip
 
