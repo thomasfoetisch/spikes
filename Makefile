@@ -12,10 +12,10 @@ all: $(BIN) $(LIB) $(HEADERS)
 
 -include $(DEPS)
 
-$(HEADERS): include/%: src/%
+$(HEADERS): include/spikes/%: src/%
 	@echo "[INST]" $(<:src/%=%)
-	@install -d $(dir $<)
-	@install -m 0644 $< $(dir $@)
+	@$(MKDIR) $(MKDIRFLAGS) $(dir $@)
+	@cp $< $(dir $@)
 
 $(OBJECTS): build/%.o: %.cpp
 	@echo "[CXX] " $@
